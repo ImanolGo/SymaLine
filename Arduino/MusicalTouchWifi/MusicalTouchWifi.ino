@@ -25,9 +25,10 @@
 char ssid[] = "TP-LINK_54E4"; //  your network SSID (name)
 char pass[] = "27155332";    // your network password (use for WPA, or use as key for WEP)
 
-IPAddress ip(192, 168, 0, 21); // First Dress IP
+IPAddress ip(192, 168, 0, 21); //  Dress IP
 IPAddress gateway(192, 168, 0, 1); // set gateway to match your network
 IPAddress subnet(255, 255, 255, 0); // set subnet mask to match your network
+IPAddress ipRemote(192, 168, 0, 100); //Remote IP
 
 unsigned int localPort = 2390;      // local port to listen on
 WiFiUDP Udp;
@@ -37,6 +38,9 @@ char  ReplyBuffer[] = "acknowledged";       // a string to send back
 
 const int BUTTON_PIN = 0;
 const int LED_PIN = 5;
+
+const int NUM_TOUCH_PINS = 9;
+const int touchPins[] = {T0,T2,T3,T4,T5,T6,T7,T8,T9};
 
 void setup()                    
 {
@@ -104,8 +108,47 @@ void connectWifi() {
 
 void loop()                    
 {
-    
+   checkWifiConnection();
+   sendTouchPins();
 }
+
+void checkWifiConnection(){
+  if(WiFi.status() != WL_CONNECTED) {
+      
+      initializeWifi();
+      connectWifi();
+      printWiFiStatus();
+   }
+}
+
+
+void sendTouchPins()
+{
+  
+    // send a reply, to the IP address and port that sent us the packet we received
+//    if( !Udp.beginPacket("imanolgo-pro.local", localPort)){
+//       Serial.println("Could not resolve the hostname or port.");
+//    }
+
+    if( !Udp.beginPacket(ipRemote, localPort)){
+       Serial.println("Could not resolve the hostname or port.");
+    }
+   
+    //Udp.write(ReplyBuffer);
+   
+   for(int i = 0; i< NUM_TOUCH_PINS; i++)
+   {
+      //Serial.print(touchRead(touchPins[i]));  // get value using Ti
+      //Serial.print(" ");
+      Udp.print(touchRead(touchPins[i]));  // get value using Ti
+      Udp.print(" ");
+   }
+    //Serial.println("");
+    //delay(500);
+
+    Udp.endPacket();
+}
+
 
 void printMacAddress() {
   // the MAC address of your WiFi shield
@@ -143,6 +186,7 @@ void printWiFiStatus() {
   Serial.print(rssi);
   Serial.println(" dBm");
 }
+
 
 
 

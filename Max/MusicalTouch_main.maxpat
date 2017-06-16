@@ -78,62 +78,17 @@
 				"box" : 				{
 					"id" : "obj-1",
 					"maxclass" : "newobj",
-					"numinlets" : 2,
-					"numoutlets" : 4,
-					"outlettype" : [ "", "", "", "" ],
-					"patching_rect" : [ 51.0, 105.0, 149.0, 22.0 ],
+					"numinlets" : 0,
+					"numoutlets" : 9,
+					"outlettype" : [ "", "", "", "", "", "", "", "", "" ],
+					"patching_rect" : [ 51.0, 105.0, 139.0, 22.0 ],
 					"style" : "",
-					"text" : "MusicalTouch_SerialRead"
+					"text" : "MusicalTouch_WifiRead"
 				}
 
 			}
  ],
 		"lines" : [ 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 3 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-1", 3 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 2 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-1", 2 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 1 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-1", 1 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-1", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-3", 0 ]
-				}
-
-			}
-, 			{
 				"patchline" : 				{
 					"destination" : [ "obj-3", 0 ],
 					"disabled" : 0,
@@ -144,15 +99,15 @@
 			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "MusicalTouch_SerialRead.maxpat",
-				"bootpath" : "~/Google Drive/Freelancing/2017/ElektroCouture/MusicalTouch/Max",
+				"name" : "MusicalTouch_WifiRead.maxpat",
+				"bootpath" : "~/Google Drive/Freelancing/2017/ElektroCouture/LaylaMueller/SymaLine/Max",
 				"patcherrelativepath" : ".",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "MusicalTouch_midi.maxpat",
-				"bootpath" : "~/Google Drive/Freelancing/2017/ElektroCouture/MusicalTouch/Max",
+				"bootpath" : "~/Google Drive/Freelancing/2017/ElektroCouture/LaylaMueller/SymaLine/Max",
 				"patcherrelativepath" : ".",
 				"type" : "JSON",
 				"implicit" : 1
