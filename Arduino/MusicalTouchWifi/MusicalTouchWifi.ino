@@ -70,11 +70,12 @@ void setupWifi() {
 
 
 void initializeWifi() {
-    WiFi.disconnect();
+   
     Udp.stop();
     Udp.flush();
-  
+    WiFi.disconnect(true);
     WiFi.config(ip, gateway, subnet);
+    WiFi.setAutoReconnect(true);
 }
 
 
@@ -85,8 +86,8 @@ void connectWifi() {
    Serial.print("Attempting to connect to SSID: ");
    Serial.println(ssid);
 
-   WiFi.begin(ssid, pass);
-   
+
+  WiFi.begin(ssid, pass);
   while (WiFi.status() != WL_CONNECTED) 
   {
     // Blink LED while we're connecting:
@@ -114,7 +115,7 @@ void loop()
 
 void checkWifiConnection(){
   if(WiFi.status() != WL_CONNECTED) {
-      
+      Serial.print("Wifi Disconnected!!!");
       initializeWifi();
       connectWifi();
       printWiFiStatus();
@@ -148,6 +149,7 @@ void sendTouchPins()
 
     Udp.endPacket();
 }
+
 
 
 void printMacAddress() {
