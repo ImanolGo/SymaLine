@@ -30,8 +30,8 @@ IPAddress gateway(192, 168, 0, 1); // set gateway to match your network
 IPAddress subnet(255, 255, 255, 0); // set subnet mask to match your network
 IPAddress ipRemote(192, 168, 0, 100); //Remote IP
 
-unsigned int localPort = 2390;      // local port to listen on
-WiFiUDP Udp;
+unsigned int udpPort = 2390;      // local port to listen on
+WiFiUDP udp;
 
 char packetBuffer[255]; //buffer to hold incoming packet
 char  ReplyBuffer[] = "acknowledged";       // a string to send back
@@ -41,6 +41,8 @@ const int LED_PIN = 5;
 
 const int NUM_TOUCH_PINS = 9;
 const int touchPins[] = {T0,T2,T3,T4,T5,T6,T7,T8,T9};
+
+boolean connected = false;
 
 void setup()                    
 {
@@ -53,17 +55,20 @@ void setupSerial() {
    //Initialize serial and wait for port to open:
   Serial.begin(115200);
   delay(100);
+  Serial.println("Starting Software!!");
 }
 
 void setupWifi() {
 
-  initializeWifi();
-  
-  // Print WiFi MAC address:
-  printMacAddress();
+//  initializeWifi();
+//  
+//  // Print WiFi MAC address:
+//  printMacAddress();
+//
+//  connectWifi();
+//  printWiFiStatus();
 
-  connectWifi();
-  printWiFiStatus();
+  connectToWiFi(ssid, pass);
   
 }
 
@@ -71,8 +76,8 @@ void setupWifi() {
 
 void initializeWifi() {
    
-    Udp.stop();
-    Udp.flush();
+   // udp.stop();
+    //udp.flush();
     WiFi.disconnect(true);
     WiFi.config(ip, gateway, subnet);
     WiFi.setAutoReconnect(true);
@@ -100,16 +105,16 @@ void connectWifi() {
    Serial.print("\nConnected to SSID: ");
    Serial.println(ssid);
 
-    Serial.print("\nStarting connection to UDP port ");
-    Serial.println(localPort);
+    //Serial.print("\nStarting connection to UDP port ");
+    //Serial.println(udpPort);
     // if you get a connection, report back via serial:
-    Udp.begin(localPort);
-    Udp.flush();
+    //udp.begin(udpPort);
+    //udp.flush();
 }
 
 void loop()                    
 {
-   checkWifiConnection();
+   //checkWifiConnection();
    sendTouchPins();
 }
 
@@ -125,29 +130,30 @@ void checkWifiConnection(){
 
 void sendTouchPins()
 {
-  
-    // send a reply, to the IP address and port that sent us the packet we received
-//    if( !Udp.beginPacket("imanolgo-pro.local", localPort)){
-//       Serial.println("Could not resolve the hostname or port.");
-//    }
+      //only send data when connected
+    if(connected)
+    {
 
-    if( !Udp.beginPacket(ipRemote, localPort)){
+       if( !udp.beginPacket(ipRemote, udpPort)){
        Serial.println("Could not resolve the hostname or port.");
+         }
+    
+      //Send a packet
+      udp.beginPacket(ipRemote,udpPort);
+       for(int i = 0; i< NUM_TOUCH_PINS; i++)
+      {
+         //Serial.print(touchRead(touchPins[i]));  // get value using Ti
+          //Serial.print(" ");
+          udp.print(touchRead(touchPins[i]));  // get value using Ti
+          udp.print(" ");
+      }  
+      udp.endPacket();
     }
-   
-    //Udp.write(ReplyBuffer);
-   
-   for(int i = 0; i< NUM_TOUCH_PINS; i++)
-   {
-      //Serial.print(touchRead(touchPins[i]));  // get value using Ti
-      //Serial.print(" ");
-      Udp.print(touchRead(touchPins[i]));  // get value using Ti
-      Udp.print(" ");
-   }
-    //Serial.println("");
-    //delay(500);
+    else{
+       software_Reset();
+    }
 
-    Udp.endPacket();
+    delay(1);
 }
 
 
@@ -189,8 +195,49 @@ void printWiFiStatus() {
   Serial.println(" dBm");
 }
 
+void connectToWiFi(const char * ssid, const char * pwd){
+  Serial.println("Connecting to WiFi network: " + String(ssid));
 
+  // delete old config
+  WiFi.disconnect(true);
+  delay(100);
+  //register event handlerpin
+  WiFi.onEvent(WiFiEvent);
+  WiFi.config(ip, gateway, subnet);
+  WiFi.setAutoReconnect(true);
+  WiFi.setAutoConnect(true);
+  
+  //Initiate connection
+  WiFi.begin(ssid, pwd);
 
+  Serial.println("Waiting for WIFI connection...");
+}
+
+//wifi event handler
+void WiFiEvent(WiFiEvent_t event){
+    switch(event) {
+      case SYSTEM_EVENT_STA_GOT_IP:
+          //When connected set 
+          Serial.print("WiFi connected! IP address: ");
+          Serial.println(WiFi.localIP());  
+          //initializes the UDP state
+          //This initializes the transfer buffer
+          //udp.begin(WiFi.localIP(),udpPort);
+          connected = true;
+          break;
+      case SYSTEM_EVENT_STA_DISCONNECTED:
+          Serial.println("WiFi lost connection");
+          connected = false;
+          software_Reset();
+          //connectToWiFi(ssid, pass);
+          break;
+    }
+}
+
+void software_Reset() // Restarts program from beginning but does not reset the peripherals and registers
+{
+  esp_restart();  //tells the SDK to reboot, so its a more clean reboot, use this one if possible.
+}  
 
 
 
