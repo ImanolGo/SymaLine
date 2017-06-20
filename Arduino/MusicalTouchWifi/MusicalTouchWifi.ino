@@ -39,8 +39,9 @@ char  ReplyBuffer[] = "acknowledged";       // a string to send back
 const int BUTTON_PIN = 0;
 const int LED_PIN = 5;
 
-const int NUM_TOUCH_PINS = 9;
-const int touchPins[] = {T0,T2,T3,T4,T5,T6,T7,T8,T9};
+const int NUM_TOUCH_PINS = 8;
+const int touchPins[] = {T0,T3,T4,T5,T6,T7,T8,T9};
+bool touchDetected[] = {false,false,false,false,false,false,false,false,false};
 
 boolean connected = false;
 
@@ -48,6 +49,7 @@ void setup()
 {
   setupSerial();
   setupWifi();
+  //setupTouch();
 
 }
 
@@ -73,7 +75,21 @@ void setupWifi() {
 }
 
 
+void setupTouch() 
+{
+  int threshold = 40;
+  touchAttachInterrupt(T0, gotTouch0, threshold);
+  touchAttachInterrupt(T2, gotTouch2, threshold);
+  touchAttachInterrupt(T3, gotTouch3, threshold);
+  touchAttachInterrupt(T4, gotTouch4, threshold);
+  touchAttachInterrupt(T5, gotTouch5, threshold);
+  touchAttachInterrupt(T6, gotTouch6, threshold);
+  touchAttachInterrupt(T7, gotTouch7, threshold);
 
+  threshold = 15;
+  touchAttachInterrupt(T8, gotTouch8, threshold);
+  touchAttachInterrupt(T9, gotTouch9, threshold);
+}
 void initializeWifi() {
    
    // udp.stop();
@@ -127,6 +143,37 @@ void checkWifiConnection(){
    }
 }
 
+//
+//void sendTouchPins()
+//{
+//      //only send data when connected
+//    if(connected)
+//    {
+//
+//       if( !udp.beginPacket(ipRemote, udpPort)){
+//       Serial.println("Could not resolve the hostname or port.");
+//         }
+//    
+//      //Send a packet
+//      udp.beginPacket(ipRemote,udpPort);
+//       for(int i = 0; i< NUM_TOUCH_PINS; i++)
+//      {
+//         //Serial.print(touchRead(touchPins[i]));  // get value using Ti
+//          //Serial.print(" ");
+//          uint8_t sendByte = 48; 
+//          if(touchDetected[i]){
+//            sendByte = 49;
+//          }
+//  
+//          udp.write(sendByte);
+//          udp.write(32);
+//      }  
+//      udp.endPacket();
+//    }
+//
+//    resetDetected();
+//    delay(1);
+//}
 
 void sendTouchPins()
 {
@@ -148,9 +195,6 @@ void sendTouchPins()
           udp.print(" ");
       }  
       udp.endPacket();
-    }
-    else{
-       software_Reset();
     }
 
     delay(1);
@@ -238,6 +282,55 @@ void software_Reset() // Restarts program from beginning but does not reset the 
 {
   esp_restart();  //tells the SDK to reboot, so its a more clean reboot, use this one if possible.
 }  
+
+void resetDetected(){
+  
+   for(int i = 0; i< NUM_TOUCH_PINS; i++)
+  {
+    touchDetected[i] = false;
+  }
+}
+
+void gotTouch0(){
+ touchDetected[0] = true;
+}
+
+void gotTouch2(){
+ touchDetected[1] = true;
+}
+
+
+void gotTouch3(){
+ touchDetected[2] = true;
+}
+
+void gotTouch4(){
+touchDetected[3] = true;
+}
+
+
+void gotTouch5(){
+ touchDetected[4] = true;
+}
+
+void gotTouch6(){
+ touchDetected[5] = true;
+}
+
+void gotTouch7(){
+ touchDetected[6] = true;
+}
+
+void gotTouch8(){
+ touchDetected[7] = true;
+}
+
+
+void gotTouch9(){
+ touchDetected[8] = true;
+}
+
+
 
 
 
