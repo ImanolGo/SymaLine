@@ -30,7 +30,8 @@ IPAddress gateway(192, 168, 0, 1); // set gateway to match your network
 IPAddress subnet(255, 255, 255, 0); // set subnet mask to match your network
 IPAddress ipRemote(192, 168, 0, 100); //Remote IP
 
-unsigned int udpPort = 2390;      // local port to listen on
+//unsigned int udpPort = 2390;      // local port to listen on
+unsigned int udpPort = 2391;      // local port to listen on
 WiFiUDP udp;
 
 char packetBuffer[255]; //buffer to hold incoming packet
