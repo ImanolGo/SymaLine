@@ -193,6 +193,13 @@
 				"type" : "JSON",
 				"implicit" : 1
 			}
+, 			{
+				"name" : "MT_Demo_MidiNote.maxpat",
+				"bootpath" : "~/Google Drive/Freelancing/2017/ElektroCouture/LaylaMueller/SymaLine/Max/Demo",
+				"patcherrelativepath" : ".",
+				"type" : "JSON",
+				"implicit" : 1
+			}
  ],
 		"embedsnapshot" : 0
 	}

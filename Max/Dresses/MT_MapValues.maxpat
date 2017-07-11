@@ -69,7 +69,7 @@
 					"maxclass" : "inlet",
 					"numinlets" : 0,
 					"numoutlets" : 1,
-					"outlettype" : [ "" ],
+					"outlettype" : [ "bang" ],
 					"patching_rect" : [ 193.75, 47.0, 30.0, 30.0 ],
 					"style" : ""
 				}
@@ -84,7 +84,7 @@
 					"outlettype" : [ "int" ],
 					"patching_rect" : [ 193.75, 157.0, 29.5, 22.0 ],
 					"style" : "",
-					"text" : "- 2"
+					"text" : "- 5"
 				}
 
 			}
@@ -135,7 +135,7 @@
 					"outlettype" : [ "int" ],
 					"patching_rect" : [ 150.0, 157.0, 31.0, 22.0 ],
 					"style" : "",
-					"text" : "- 10"
+					"text" : "- 15"
 				}
 
 			}
@@ -372,9 +372,7 @@
 				}
 
 			}
- ],
-		"dependency_cache" : [  ],
-		"embedsnapshot" : 0
+ ]
 	}
 
 }

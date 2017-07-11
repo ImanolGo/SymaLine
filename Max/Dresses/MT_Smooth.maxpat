@@ -136,7 +136,7 @@
 					"outlettype" : [ "", "" ],
 					"patching_rect" : [ 65.0, 149.0, 69.0, 22.0 ],
 					"style" : "",
-					"text" : "zl stream 5"
+					"text" : "zl stream 8"
 				}
 
 			}
