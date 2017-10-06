@@ -2,7 +2,7 @@
 
 The Syma Line visualizes sound by using a range of innovative techniques to give each outfit a different character. The project aims to explore the symbiosis between music, fashion and science, showcasing the evidence of how sound and frequencies affect the physical world. The first two outfits of The Syma Line each visualize one of physicist Ernst Chladni’s sound figures through their shape.
 
-It was developed during the Designers in Residency program from ElektroCouture.
+It was developed for Layla Mueller during the Designers in Residency program from ElektroCouture.
 
 ## Installation
 
