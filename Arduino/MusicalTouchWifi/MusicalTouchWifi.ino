@@ -22,11 +22,11 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-//char ssid[] = "TP-LINK_2BDE"; //  your network SSID (name)
-//char pass[] = "98639243";    // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "TP-LINK_2BDE"; //  your network SSID (name)
+char pass[] = "98639243";    // your network password (use for WPA, or use as key for WEP)
 
-char ssid[] = "TP-LINK_54E4"; //  your network SSID (name)
-char pass[] = "27155332";    // your network password (use for WPA, or use as key for WEP)
+//char ssid[] = "TP-LINK_54E4"; //  your network SSID (name)
+//char pass[] = "27155332";    // your network password (use for WPA, or use as key for WEP)
 
 
 //IPAddress ip(192, 168, 0, 21); //  Dress IP
