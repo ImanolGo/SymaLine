@@ -22,17 +22,24 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-char ssid[] = "TP-LINK_54F0"; //  your network SSID (name)
-char pass[] = "94124057";    // your network password (use for WPA, or use as key for WEP)
+//char ssid[] = "TP-LINK_2BDE"; //  your network SSID (name)
+//char pass[] = "98639243";    // your network password (use for WPA, or use as key for WEP)
 
-IPAddress ip(192, 168, 133, 21); //  Dress IP
-//IPAddress ip(192, 168, 133, 22); //  Dress IP
-IPAddress gateway(192, 168, 133, 1); // set gateway to match your network
-IPAddress subnet(255, 255, 255, 0); // set subnet mask to match your network
-IPAddress ipRemote(192, 168, 133, 100); //Remote IP
+char ssid[] = "TP-LINK_54E4"; //  your network SSID (name)
+char pass[] = "27155332";    // your network password (use for WPA, or use as key for WEP)
 
-//unsigned int udpPort = 2390;      // local port to listen on
-unsigned int udpPort = 2391;      // local port to listen on
+
+//IPAddress ip(192, 168, 0, 21); //  Dress IP
+IPAddress ip(192, 168, 0, 22); //  Dress IP
+IPAddress gateway(192, 168, 0, 1); // set gateway to match your network
+IPAddress subnet(255, 255, 0, 0); // set subnet mask to match your network
+IPAddress ipRemote(192, 168, 0, 100); //Remote IP
+IPAddress ipBroadCast(192, 168, 0, 255); //Remote IP
+
+//unsigned int sendPort = 2390;      // local port to send to
+unsigned int sendPort = 2391;      //  port to send to
+unsigned int receivePort = 3333;      // local port to receive 
+
 WiFiUDP udp;
 
 char packetBuffer[255]; //buffer to hold incoming packet
@@ -44,7 +51,7 @@ const int LED_PIN = 5;
 const int NUM_TOUCH_PINS = 8;
 const int touchPins[] = {T0,T3,T4,T5,T6,T7,T8,T9};
 
-boolean connected = false;
+boolean connected = true;
 
 void setup()                    
 {
@@ -61,12 +68,12 @@ void setupSerial() {
 
 void setupWifi() {
 
-//  initializeWifi();
+ //initializeWifi();
 //  
 //  // Print WiFi MAC address:
 //  printMacAddress();
 //
-//  connectWifi();
+  //connectWifi();
 //  printWiFiStatus();
 
   connectToWiFi(ssid, pass);
@@ -104,15 +111,18 @@ void connectWifi() {
    Serial.print("\nConnected to SSID: ");
    Serial.println(ssid);
 
+   connected = true;
+
     //Serial.print("\nStarting connection to UDP port ");
-    //Serial.println(udpPort);
+    //Serial.println(receivePort);
     // if you get a connection, report back via serial:
-    //udp.begin(udpPort);
+    //udp.begin(receivePort);
     //udp.flush();
 }
 
 void loop()                    
 {
+   checkConnect();
    //checkWifiConnection();
    sendTouchPins();
 }
@@ -126,22 +136,54 @@ void checkWifiConnection(){
    }
 }
 
+
+void checkConnect(){
+ // if there's data available, read a packet
+  int packetSize = udp.parsePacket();
+  if (packetSize) {
+    Serial.print("Received packet of size ");
+    Serial.println(packetSize);
+    Serial.print("From ");
+    Serial.print(ipRemote);
+    Serial.print(", port ");
+    Serial.println(udp.remotePort());
+
+    // read the packet into packetBufffer
+    int len = udp.read(packetBuffer, 255);
+    if (len > 0) {
+      packetBuffer[len] = 0;
+    }
+
+    Serial.println("Contents:");
+    Serial.println(packetBuffer);
+
+    if(packetBuffer[0] == 'c'){
+      ipRemote = udp.remoteIP();
+       Serial.print("Sending to IP address: ");
+       Serial.println(ipRemote);  
+    }
+    
+  }
+}
+
+
 void sendTouchPins()
 {
       //only send data when connected
     if(connected)
     {
-
-       if( !udp.beginPacket(ipRemote, udpPort)){
-       Serial.println("Could not resolve the hostname or port.");
-         }
+       
+//       if( !udp.beginPacket(ipRemote, sendPort)){
+//       Serial.println("Could not resolve the hostname or port.");
+//         }
     
       //Send a packet
-      udp.beginPacket(ipRemote,udpPort);
+
+      udp.beginPacket(ipRemote,sendPort);
        for(int i = 0; i< NUM_TOUCH_PINS; i++)
       {
          //Serial.print(touchRead(touchPins[i]));  // get value using Ti
-          //Serial.print(" ");
+         // Serial.print(" ");
           udp.print(touchRead(touchPins[i]));  // get value using Ti
           udp.print(" ");
       }  
@@ -217,14 +259,14 @@ void WiFiEvent(WiFiEvent_t event){
           Serial.println(WiFi.localIP());  
           //initializes the UDP state
           //This initializes the transfer buffer
-          //udp.begin(WiFi.localIP(),udpPort);
+          udp.begin(WiFi.localIP(),receivePort);
           connected = true;
           break;
       case SYSTEM_EVENT_STA_DISCONNECTED:
           Serial.println("WiFi lost connection");
           connected = false;
           software_Reset();
-          //connectToWiFi(ssid, pass);
+          connectToWiFi(ssid, pass);
           break;
     }
 }

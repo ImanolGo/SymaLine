@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 34.0, 79.0, 891.0, 703.0 ],
+		"rect" : [ 620.0, 128.0, 891.0, 703.0 ],
 		"bgcolor" : [ 0.32549, 0.345098, 0.372549, 0.35 ],
 		"bglocked" : 0,
 		"openinpresentation" : 1,
@@ -38,6 +38,30 @@
 		"style" : "",
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-26",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 219.517853, 588.0, 91.0, 22.0 ],
+					"style" : "",
+					"text" : "s sendConnect"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-24",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 406.017853, 314.0, 113.0, 22.0 ],
+					"style" : "",
+					"text" : "MT_WifiSend 3333"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-35",
 					"maxclass" : "newobj",
@@ -664,6 +688,15 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-26", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-31", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-34", 0 ],
 					"disabled" : 0,
 					"hidden" : 0,
@@ -735,6 +768,13 @@
 				"bootpath" : "~/Google Drive/Freelancing/2017/ElektroCouture/LaylaMueller/SymaLine/Docs",
 				"patcherrelativepath" : "../../Docs",
 				"type" : "PNG ",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "MT_WifiSend.maxpat",
+				"bootpath" : "~/Google Drive/Freelancing/2017/ElektroCouture/LaylaMueller/SymaLine/Max/Dresses",
+				"patcherrelativepath" : ".",
+				"type" : "JSON",
 				"implicit" : 1
 			}
  ],
